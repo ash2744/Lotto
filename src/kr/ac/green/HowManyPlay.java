@@ -27,8 +27,8 @@ public class HowManyPlay extends JDialog {
 	JButton btnCancel;
 
 	public HowManyPlay(LottoGame owner) {
-		super(owner,"로또구매", true);
-		this. owner = owner;
+		super(owner, "로또구매", true);
+		this.owner = owner;
 		init();
 		Display();
 		addListeners();
@@ -61,46 +61,59 @@ public class HowManyPlay extends JDialog {
 		add(pnlMain);
 	}
 
+	public void logD(String a) {
+		System.out.println(a);
+	}
+
 	public void addListeners() {
-		class MyActionListener implements ActionListener {
-			// ActionListener aListener = new ActionListener(){
+		// class MyActionListener implements ActionListener {
+		ActionListener aListener = new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+
 				Object src = e.getSource();
-				try {
-					//drawManualNum = Integer.parseInt(tfManual.getText());
-					drawAutoNum = Integer.parseInt(tfAuto.getText());
-					HowManyPlay.this.owner.setDrawAutoNum(drawAutoNum);
-					if (src == btnOk) {
-						if ((drawAutoNum > 0 && drawAutoNum < 6)
-								|| (drawManualNum > 0 && drawManualNum < 6)) {
-							// HowManyPLay.this.owner.setDrawNum(drawAutoNum);
-							// owner.setVisible(true);
-							dispose();
-						} else {
-							JOptionPane.showMessageDialog(HowManyPlay.this,
-									"1~5개 이하로만 추첨횟수를 입력하셔야 합니다", "경고",
-									JOptionPane.WARNING_MESSAGE);
-							tfAuto.setText("");
-							tfAuto.requestFocus();
-							tfManual.setText("");
-							tfManual.requestFocus();
+				// String str = "";
+
+//				if((tfManual.getText().length() > 0)
+//						|| ((tfAuto.getText().length() > 0)))
+					try {
+						drawManualNum = (tfManual.getText().length() > 0) ? Integer.parseInt(tfManual.getText()) : 0;
+						drawAutoNum = (tfAuto.getText().length() > 0) ? Integer.parseInt(tfAuto.getText()) : 0;
+						HowManyPlay.this.owner.setDrawAutoNum(drawAutoNum);
+
+						if (src == btnOk) {
+							logD(String
+									.valueOf((tfManual.getText().length() > 0)
+											|| ((tfAuto.getText().length() > 0))));
+							if ((drawAutoNum > 0 && drawAutoNum < 6)
+									&&(drawManualNum > 0 && drawManualNum < 6)) {
+
+								dispose();
+							} else {
+								JOptionPane.showMessageDialog(HowManyPlay.this,
+										"1~5개 이하로만 추첨횟수를 입력하셔야 합니다", "경고",
+										JOptionPane.WARNING_MESSAGE);
+								tfAuto.setText("");
+								tfAuto.requestFocus();
+								tfManual.setText("");
+								tfManual.requestFocus();
+							}
 						}
+
+					} catch (NumberFormatException ne) {
+						JOptionPane.showMessageDialog(HowManyPlay.this,
+								"숫자만 입력하세요", "안내",
+								JOptionPane.INFORMATION_MESSAGE);
+						tfAuto.setText("");
+						tfManual.setText("");
+						tfAuto.requestFocus();
+						tfManual.requestFocus();
 					}
 
-				} catch (NumberFormatException ne) {
-					JOptionPane.showMessageDialog(HowManyPlay.this,
-							"숫자만 입력하세요", "안내", JOptionPane.INFORMATION_MESSAGE);
-					tfAuto.setText("");
-					tfAuto.requestFocus();
-					tfManual.setText("");
-					tfManual.requestFocus();
-				}
-
 			}
-		}
+		};
 
-		btnOk.addActionListener(new MyActionListener());
+		btnOk.addActionListener(aListener);
 		btnCancel.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -123,5 +136,9 @@ public class HowManyPlay extends JDialog {
 
 	public int getDrawAutoNum() {
 		return drawAutoNum;
+	}
+
+	public int getDrawManualNum() {
+		return drawManualNum;
 	}
 }
